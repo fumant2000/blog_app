@@ -18,6 +18,7 @@ Future<void> initDependencies() async {
     anonKey: AppSecrets.supabaseAnnonKey,
   );
   serviceLocator.registerLazySingleton(() => supabase.client);
+  serviceLocator.registerLazySingleton(() => AppUserCubit());
   // serviceLocator.registerFactory(() => null);  pour des widets ou des services temporaires.
   // serviceLocator.registerLazySingleton() Permet de creer une instance qui depend d'autres service dejas enregistrée
 }
@@ -26,24 +27,23 @@ void _initAuth() {
   serviceLocator
     //Data Sources
     ..registerFactory<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(serviceLocator<SupabaseClient>()),
+      () => AuthRemoteDataSourceImpl(serviceLocator()),
     )
     //Repository Sources
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSourceImpl>()),
+      () => AuthRepositoryImpl(serviceLocator()),
     )
     //Use Cases Source
     ..registerFactory(() => UserSignUp(serviceLocator()))
     ..registerFactory(() => UserLogin(serviceLocator()))
     ..registerFactory(() => CurrentUser(serviceLocator()))
-    ..registerLazySingleton(()=>AppUserCubit())
     // Bloc Source
     ..registerLazySingleton(
       () => AuthBloc(
         userSignUp: serviceLocator(),
         userLogin: serviceLocator(),
         currentUser: serviceLocator(),
-        appUserCubit: serviceLocator()
+        appUserCubit: serviceLocator(),
       ),
     );
 }

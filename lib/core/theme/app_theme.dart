@@ -8,6 +8,7 @@ class AppTheme {
   );
   static final darkThemeMode = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColor,
+    chipTheme:const ChipThemeData(backgroundColor: AppPallete.backgroundColor, side: BorderSide.none) ,
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.all(27),
       enabledBorder: _border(),
